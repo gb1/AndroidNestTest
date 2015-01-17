@@ -219,7 +219,7 @@ public class MainActivity extends Activity implements
     }
 
     private void updateTempSingle(View v) {
-        long temp = mThermostat.getTargetTemperatureF();
+        double temp = mThermostat.getTargetTemperatureC();
 
         switch (v.getId()) {
             case R.id.temp_up:
@@ -230,8 +230,8 @@ public class MainActivity extends Activity implements
                 break;
         }
 
-        mCurrentTempText.setText(Long.toString(temp));
-        mNestApi.setTargetTemperatureF(mThermostat.getDeviceID(), temp, null);
+        mCurrentTempText.setText(String.valueOf(temp));
+        mNestApi.setTargetTemperatureC(mThermostat.getDeviceID(), (long)temp, null);
     }
 
     private void updateView() {
@@ -242,7 +242,7 @@ public class MainActivity extends Activity implements
 
     private void updateAmbientTempTextView() {
         if (mThermostat != null) {
-            mAmbientTempText.setText(Long.toString(mThermostat.getAmbientTemperatureF()));
+            mAmbientTempText.setText(String.valueOf(mThermostat.getAmbientTemperatureC()));
         }
     }
 
@@ -297,8 +297,8 @@ public class MainActivity extends Activity implements
         mCurrentHeatTempText.setText(Long.toString(mThermostat.getTargetTemperatureHighF()));
         mCurrentCoolTempText.setText(Long.toString(mThermostat.getTargetTemperatureLowF()));
 
-        final long tempDiffHigh = mThermostat.getTargetTemperatureHighF() - mThermostat.getAmbientTemperatureF();
-        final long tempDiffLow = mThermostat.getTargetTemperatureLowF() - mThermostat.getAmbientTemperatureF();
+        final double tempDiffHigh = mThermostat.getTargetTemperatureHighC() - mThermostat.getAmbientTemperatureC();
+        final double tempDiffLow = mThermostat.getTargetTemperatureLowC() - mThermostat.getAmbientTemperatureC();
 
         final int thermostatDrawable;
         if (tempDiffHigh < 0) {
@@ -319,17 +319,17 @@ public class MainActivity extends Activity implements
             return;
         }
 
-        mCurrentTempText.setText(Long.toString(mThermostat.getTargetTemperatureF()));
-        Log.v(TAG, "targetTempF: " + mThermostat.getTargetTemperatureF() + " ambientF: " + mThermostat.getAmbientTemperatureF());
-        final long tempDiffF = mThermostat.getTargetTemperatureF() - mThermostat.getAmbientTemperatureF();
+        mCurrentTempText.setText(String.valueOf(mThermostat.getTargetTemperatureC()));
+        Log.v(TAG, "targetTempC: " + mThermostat.getTargetTemperatureC() + " ambientC: " + mThermostat.getAmbientTemperatureC());
+        final double tempDiffC = mThermostat.getTargetTemperatureC() - mThermostat.getAmbientTemperatureC();
 
         final int thermostatDrawable;
         switch (mThermostat.getHVACmode()) {
             case HEAT:
-                thermostatDrawable = tempDiffF > 0 ? R.drawable.heat_thermostat_drawable : R.drawable.off_thermostat_drawable;
+                thermostatDrawable = tempDiffC > 0 ? R.drawable.heat_thermostat_drawable : R.drawable.off_thermostat_drawable;
                 break;
             case COOL:
-                thermostatDrawable = tempDiffF < 0 ? R.drawable.cool_thermostat_drawable : R.drawable.off_thermostat_drawable;
+                thermostatDrawable = tempDiffC < 0 ? R.drawable.cool_thermostat_drawable : R.drawable.off_thermostat_drawable;
                 break;
             case OFF:
             default:
@@ -392,6 +392,8 @@ public class MainActivity extends Activity implements
     public void onThermostatUpdated(Thermostat thermostat) {
         Log.v(TAG, String.format("Thermostat (%s) updated.", thermostat.getDeviceID()));
         mThermostat = thermostat;
+
+
         updateView();
     }
 

@@ -12,7 +12,7 @@
 package com.nestapi.codelab.demo;
 
 public class Constants {
-    public static final String CLIENT_ID = "<insert-your-client-id-here>";
-    public static final String CLIENT_SECRET = "<insert-your-client-secret-here>";
-    public static final String REDIRECT_URL = "<insert-your-redirect-url-here>";
+    public static final String CLIENT_ID = "";
+    public static final String CLIENT_SECRET = "";
+    public static final String REDIRECT_URL = "http://localhost/";
 }
